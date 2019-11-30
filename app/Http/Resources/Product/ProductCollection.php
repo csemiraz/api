@@ -16,10 +16,13 @@ class ProductCollection extends JsonResource
     {
         return [
             'name' => $this->name,
-            'description' => $this->detail,
             'price' => $this->price,
-            'stock' => $this->stock,
+            'stock' => $this->stock==0 ? 'Out of stock' : $this->stock,
             'discount' => $this->discount,
+            'totalPrice' => round($this->price-(($this->discount*$this->price)/100), 2),
+            'href' => [
+                'link' => route('products.show', $this->id),
+            ],
         ];
     }
 }
