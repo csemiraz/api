@@ -14,6 +14,17 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'name' => $this->name,
+            'description' => $this->detail,
+            'price' => $this->price,
+            'stock' => $this->stock==0 ? 'Out of stock' : $this->stock,
+            'discount' => $this->discount,
+            'totalPrice' => round($this->price-(($this->discount*$this->price)/100), 2),
+            'rating' => $this->reviews->count() > 0 ? round($this->reviews->sum('star')/$this->reviews->count(), 2) : 'There is no review for this product',
+            'href' => [
+                'reviews' => route('reviews.index', $this->id),
+            ]
+        ];
     }
 }
